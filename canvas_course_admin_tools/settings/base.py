@@ -89,7 +89,19 @@ WSGI_APPLICATION = 'canvas_course_admin_tools.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASE_ROUTERS = ['icommons_common.routers.CourseSchemaDatabaseRouter']
+DATABASE_APPS_MAPPING = {
+    'auth': 'default',
+    'contenttypes': 'default',
+    'icommons_common': 'termtool',
+    'lti_permissions': 'default',
+    'manage_people': 'default',
+    'manage_sections': 'default',
+    'sessions': 'default',
+}
+
+DATABASE_MIGRATION_WHITELIST = ['default']
+
+DATABASE_ROUTERS = ['icommons_common.routers.DatabaseAppsRouter', ]
 
 DATABASES = {
     'default': {
@@ -241,6 +253,16 @@ LOGGING = {
             'level': _DEFAULT_LOG_LEVEL,
             'propagate': False,
         },
+        'manage_people': {
+            'handlers': ['default'],
+            'level': _DEFAULT_LOG_LEVEL,
+            'propagate': False,
+        },
+        'manage_sections': {
+            'handlers': ['default'],
+            'level': _DEFAULT_LOG_LEVEL,
+            'propagate': False,
+        },
     }
 }
 
@@ -251,7 +273,7 @@ ENV_NAME = SECURE_SETTINGS.get('env_name', 'local')
 
 LTI_OAUTH_CREDENTIALS = SECURE_SETTINGS.get('lti_oauth_credentials', None)
 
-CANVAS_URL = SECURE_SETTINGS.get('canvas_url', 'https://canvas.instructure.com')
+CANVAS_URL = SECURE_SETTINGS.get('canvas_url', 'https://canvas.harvard.edu')
 
 CANVAS_SDK_SETTINGS = {
     'auth_token': SECURE_SETTINGS.get('canvas_token', None),
@@ -269,6 +291,7 @@ ICOMMONS_COMMON = {
     'CANVAS_API_HEADERS': {
         'Authorization': 'Bearer ' + SECURE_SETTINGS.get('canvas_token', 'canvas_token_missing_from_config')
     },
+    'CANVAS_ROOT_ACCOUNT_ID': 1,
 }
 
 PERMISSION_ISITES_MIGRATION_IMPORT_FILES = 'im_import_files'
