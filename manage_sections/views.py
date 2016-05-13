@@ -1,27 +1,23 @@
 import json
 import logging
 
+from canvas_sdk.exceptions import CanvasAPIError
+from canvas_sdk.methods import enrollments as canvas_api_enrollments
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods, require_safe
 from django_auth_lti import const
 from django_auth_lti.decorators import lti_role_required
-
-from ims_lti_py.tool_config import ToolConfig
-
-from canvas_sdk.methods import enrollments as canvas_api_enrollments
-from canvas_sdk.exceptions import CanvasAPIError
-
-from icommons_common.models import Person
-from icommons_common.monitor.views import BaseMonitorResponseView
 from icommons_common.canvas_api.helpers import (
     courses as canvas_api_helper_courses,
     enrollments as canvas_api_helper_enrollments,
     sections as canvas_api_helper_sections
 )
+from icommons_common.models import Person
+from icommons_common.monitor.views import BaseMonitorResponseView
+from lti_permissions.decorators import lti_permission_required
 
 from .utils import (
     SDK_CONTEXT,
@@ -31,7 +27,6 @@ from .utils import (
     is_sis_section,
     is_credit_status_section,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +114,7 @@ def _add_badge_label_name_to_enrollments(enrollments):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['GET'])
 def create_section_form(request):
     try:
@@ -166,6 +162,7 @@ def create_section_form(request):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['POST'])
 def create_section(request):
     canvas_course_id = request.LTI['custom_canvas_course_id']
@@ -190,6 +187,7 @@ def create_section(request):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['POST'])
 def edit_section(request, section_id):
     canvas_course_id = request.LTI['custom_canvas_course_id']
@@ -249,6 +247,7 @@ def edit_section(request, section_id):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['GET'])
 def section_details(request, section_id):
     canvas_course_id = request.LTI['custom_canvas_course_id']
@@ -268,6 +267,7 @@ def section_details(request, section_id):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['GET'])
 def section_user_list(request, section_id):
     canvas_course_id = request.LTI['custom_canvas_course_id']
@@ -286,6 +286,7 @@ def section_user_list(request, section_id):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['POST'])
 def remove_section(request, section_id):
     canvas_course_id = request.LTI['custom_canvas_course_id']
@@ -313,6 +314,7 @@ def remove_section(request, section_id):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_safe
 def section_class_list(request, section_id):
     """
@@ -342,6 +344,7 @@ def section_class_list(request, section_id):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['POST'])
 def add_to_section(request):
     try:
@@ -380,6 +383,7 @@ def add_to_section(request):
 
 @login_required
 @lti_role_required([const.INSTRUCTOR, const.TEACHING_ASSISTANT, const.ADMINISTRATOR, const.CONTENT_DEVELOPER])
+@lti_permission_required('manage_sections')
 @require_http_methods(['POST'])
 def remove_from_section(request):
     canvas_course_id = request.LTI['custom_canvas_course_id']
