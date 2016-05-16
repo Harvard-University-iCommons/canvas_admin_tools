@@ -41,7 +41,3 @@ INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('
 INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hilr', 5, 'N');
 INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hilr', 7, 'N');
 INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hilr', 10, 'Y');
-INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hks', 9, 'N');
-INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hks', 5, 'N');
-INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hks', 7, 'N');
-INSERT INTO school_allowed_role (school_id, user_role_id, xid_allowed) VALUES ('hks', 10, 'Y');
