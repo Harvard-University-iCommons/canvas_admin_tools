@@ -41,13 +41,14 @@ Assumptions:
         failed_rows = []
 
         with transaction.atomic():
+            # NOTE - verify if we should be deleting all rows every time this runs?
             SchoolAllowedRole.objects.all().delete()
             for row in rows:
                 try:
                     # TODO - FIXME - HACK - look up column ids by matching headers
-                    school_id = row[1].lower()
-                    canvas_role_id = int(row[2])
-                    xid_allowed = YES_NO_MAP[row[4]]
+                    school_id = row[0].lower()
+                    user_role_id = int(row[1])
+                    xid_allowed = YES_NO_MAP[row[2]]
                 except Exception as e:
                     warnings.warn('Unable to normalize inputs in row {}: {}'.format(
                                       row, str(e)))
@@ -57,7 +58,7 @@ Assumptions:
                 try:
                     sar, created = SchoolAllowedRole.objects.get_or_create(
                                        school_id=school_id,
-                                       canvas_role_id=canvas_role_id,
+                                       user_role_id=user_role_id,
                                        xid_allowed=xid_allowed)
                     if created:
                         num_created += 1
@@ -66,7 +67,7 @@ Assumptions:
                 except Exception as e:
                     warnings.warn(
                         'Unable to get_or_create ({}, {}, {}): {}'.format(
-                            school_id, canvas_role_id, xid_allowed, str(e)))
+                            school_id, user_role_id, xid_allowed, str(e)))
                     failed_rows.append(row)
 
         self.stdout.write(
