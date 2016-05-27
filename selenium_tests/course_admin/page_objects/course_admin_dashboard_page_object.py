@@ -6,6 +6,7 @@ from selenium_tests.course_admin.page_objects.course_admin_base_page_object \
 
 
 class Locators(object):
+    CLASS_ROSTER_BUTTON = (By.ID, "course-roster")
     MANAGE_PEOPLE_BUTTON = (By.ID, "manage-people")
     # if PAGE_TITLE uses contains() it will match for sub-pages as well, so
     # use text() for exact match (should only match on dashboard page)
@@ -28,7 +29,14 @@ class CourseAdminDashboardPage(CourseAdminBasePage):
 
     def select_manage_people_link(self):
         """
-        select the course info list link element and click it
+        Finds the manage people button element and clicks it
         """
         self.focus_on_tool_frame()
         self.find_element(*Locators.MANAGE_PEOPLE_BUTTON).click()
+
+    def select_class_roster_link(self):
+        """
+        Finds the class roster button element and clicks it
+        """
+        self.focus_on_tool_frame()
+        self.find_element(*Locators.CLASS_ROSTER_BUTTON).click()
