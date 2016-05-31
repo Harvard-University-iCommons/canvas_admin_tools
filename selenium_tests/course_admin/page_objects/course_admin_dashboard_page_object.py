@@ -27,6 +27,17 @@ class CourseAdminDashboardPage(CourseAdminBasePage):
             return False
         return True
 
+    def class_roster_button_is_displayed(self):
+        """
+        Verifies that the Class Roster button is displayed
+        """
+        try:
+            self.focus_on_tool_frame()
+            self.find_element(*Locators.CLASS_ROSTER_BUTTON)
+        except NoSuchElementException:
+            return False
+        return True
+
     def select_manage_people_link(self):
         """
         Finds the manage people button element and clicks it
@@ -40,3 +51,6 @@ class CourseAdminDashboardPage(CourseAdminBasePage):
         """
         self.focus_on_tool_frame()
         self.find_element(*Locators.CLASS_ROSTER_BUTTON).click()
+        # Focus on frame after clicking into Class Roster Tool
+        self.focus_on_tool_frame()
+

@@ -8,9 +8,8 @@ from selenium_tests.class_roster.page_objects.class_roster_base_page_object \
 
 
 class Locators(object):
-    pass
+    CLASS_ROSTER_BREADCRUMB = (By.XPATH, './/h1[contains(., "Class Roster")]')
 
 
 class MainPageObject(ClassRosterBasePageObject):
-    pass
-    # page_loaded_locator = Locators.()
+        page_loaded_locator = Locators.CLASS_ROSTER_BREADCRUMB
