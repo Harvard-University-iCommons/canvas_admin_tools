@@ -29,6 +29,10 @@ CONCLUDE_COURSES_URL = SECURE_SETTINGS.get(
 dictConfig(LOGGING)
 
 SELENIUM_CONFIG = {
+    'class_roster': {
+        'course_link': 'https://canvas.dev.tlt.harvard.edu/courses/3787'
+                       '/external_tools/162',
+    },
     'canvas_base_url': SECURE_SETTINGS.get('canvas_url'),
     'debug': {
         'log_config': {

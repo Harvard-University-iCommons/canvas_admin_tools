@@ -1,4 +1,5 @@
 from os.path import abspath, dirname, join
+from django.conf import settings
 
 from selenium_tests.course_admin.course_admin_base_test_case \
     import CourseAdminBaseTestCase
@@ -26,6 +27,10 @@ class ClassRosterBaseTestCase(CourseAdminBaseTestCase):
         self.class_roster_page = MainPageObject(self.driver)
         self.dashboard_page.select_class_roster_link()
         self.assertTrue(self.class_roster_page.is_loaded())
+
+        self.test_settings = settings.SELENIUM_CONFIG['class_roster']
+        # main_page = MainPageObject(self.driver)
+        # dashboard = CourseAdminDashboardPage(self.driver)
 
         # initialize
         if not self.dashboard_page.is_loaded():
