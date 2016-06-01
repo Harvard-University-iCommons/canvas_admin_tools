@@ -32,6 +32,8 @@ SELENIUM_CONFIG = {
     'class_roster': {
         'course_link': 'https://canvas.dev.tlt.harvard.edu/courses/3787'
                        '/external_tools/162',
+        'roster_text_display': 'JAPAN BA 001',
+        'url_link_course_number': '14754'
     },
     'canvas_base_url': SECURE_SETTINGS.get('canvas_url'),
     'debug': {

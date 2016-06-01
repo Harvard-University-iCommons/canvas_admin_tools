@@ -27,6 +27,7 @@ class MainPageObject(ClassRosterBasePageObject):
         """
         try:
             link = self.find_element(*Locators.FIND_LINK_TEXT(text_value))
+            # Get the URL of the link element
             link_url = link.get_attribute('href')
         except NoSuchElementException:
             return False

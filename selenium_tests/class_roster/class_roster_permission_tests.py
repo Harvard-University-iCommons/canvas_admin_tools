@@ -1,7 +1,7 @@
 from ddt import ddt, data, unpack
 
 from selenium_common.base_test_case import get_xl_data
-from selenium_tests.class_roster.base_test_case import \
+from selenium_tests.class_roster.class_roster_base_test_case import \
     CLASS_ROSTER_PERMISSION_ROLES
 from selenium_tests.course_admin.course_admin_base_test_case import \
     CourseAdminBaseTestCase

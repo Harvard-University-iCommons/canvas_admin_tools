@@ -25,16 +25,22 @@ class ClassRosterBaseTestCase(CourseAdminBaseTestCase):
         # instantiate
         self.dashboard_page = CourseAdminDashboardPage(self.driver)
         self.class_roster_page = MainPageObject(self.driver)
+        self.main_page = MainPageObject(self.driver)
+        self.test_settings = settings.SELENIUM_CONFIG['class_roster']
+
+        # After setup, override the default automated test URL, which
+        # does not have a working class roster, with this course site.
+        self.main_page.get(self.test_settings['course_link'])
+        self.main_page.focus_on_tool_frame()
+
+        # Click on the class roster button from the dashboard
         self.dashboard_page.select_class_roster_link()
         self.assertTrue(self.class_roster_page.is_loaded())
 
-        self.test_settings = settings.SELENIUM_CONFIG['class_roster']
-        # main_page = MainPageObject(self.driver)
-        # dashboard = CourseAdminDashboardPage(self.driver)
 
         # initialize
         if not self.dashboard_page.is_loaded():
-            self.dashboard_page.get(self.TOOL_URL)
+            self.dashboard_page.get(self.test_settings['course_link'])
 
         # navigate to class-roster tool
         self.dashboard_page.select_class_roster_link()
