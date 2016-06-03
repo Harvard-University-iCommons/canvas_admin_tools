@@ -26,6 +26,6 @@ class ClassRosterTests(ClassRosterBaseTestCase):
                         "class roster's URL")
 
         # Verify that the expected term code appears in the link URL
-        self.assertTrue(url_link_course_number in link_url,
+        self.assertTrue(url_term_code in link_url,
                         "The expected term code does not appear in the class "
                         "roster's URL")
