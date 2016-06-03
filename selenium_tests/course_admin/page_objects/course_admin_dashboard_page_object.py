@@ -33,7 +33,7 @@ class CourseAdminDashboardPage(CourseAdminBasePage):
         """
         try:
             self.focus_on_tool_frame()
-            self.find_element(*Locators.CLASS_ROSTER_BUTTON)
+            self.find_element(*Locators.CLASS_ROSTER_BUTTON).is_displayed()
         except NoSuchElementException:
             return False
         return True
