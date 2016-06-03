@@ -23,7 +23,11 @@ class MainPageObject(ClassRosterBasePageObject):
 
     def get_link_url(self, text_value):
         """
-        Returns the URL from the partial link text passed in from tests.
+        There are links that are displayed in the Roster Tool.  This method
+        gets the actual URL based on the 'partial link text' match,
+        and returns the URL. Because the URL links off to my.harvard (no
+        access), the test checks the URL for parameters that match the
+        course, such as course number and term ID.
         """
         try:
             link = self.find_element(*Locators.FIND_LINK_TEXT(text_value))

@@ -1,5 +1,6 @@
 from os.path import abspath, dirname, join
 from django.conf import settings
+from urlparse import urljoin
 
 from selenium_tests.course_admin.course_admin_base_test_case \
     import CourseAdminBaseTestCase
@@ -23,27 +24,19 @@ class ClassRosterBaseTestCase(CourseAdminBaseTestCase):
         super(CourseAdminBaseTestCase, self).setUp()
 
         # instantiate
-        self.dashboard_page = CourseAdminDashboardPage(self.driver)
-        self.class_roster_page = MainPageObject(self.driver)
-        self.main_page = MainPageObject(self.driver)
-        self.test_settings = settings.SELENIUM_CONFIG['class_roster']
+        dashboard_page = CourseAdminDashboardPage(self.driver)
+        main_page = MainPageObject(self.driver)
+        test_settings = settings.SELENIUM_CONFIG['class_roster']
+
+        canvas_base_url = test_settings.SELENIUM_CONFIG['canvas_base_url']
+        tool_relative_url = test_settings.SELENIUM_CONFIG['course_link']
+        tool_url = urljoin(canvas_base_url, tool_relative_url)
 
         # After setup, override the default automated test URL, which
         # does not have a working class roster, with this course site.
-        self.main_page.get(self.test_settings['course_link'])
-        self.main_page.focus_on_tool_frame()
+        main_page.get(tool_url)
+        main_page.focus_on_tool_frame()
 
         # Click on the class roster button from the dashboard
-        self.dashboard_page.select_class_roster_link()
-        self.assertTrue(self.class_roster_page.is_loaded())
-
-
-        # initialize
-        if not self.dashboard_page.is_loaded():
-            self.dashboard_page.get(self.test_settings['course_link'])
-
-        # navigate to class-roster tool
-        self.dashboard_page.select_class_roster_link()
-
-        # check if page is loaded (which will also set the focus on the tool)
+        dashboard_page.select_class_roster_link()
         self.assertTrue(self.class_roster_page.is_loaded())

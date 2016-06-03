@@ -38,6 +38,6 @@ class ClassRosterPermissionTests(CourseAdminBaseTestCase):
 
         else:
             raise ValueError(
-                'given_access column for user {} must be either \'yes\' or '
-                '\'no\''.format(user_id)
+                'given_access column for user {} must be either "yes" or '
+                '"no"'.format(user_id)
             )
