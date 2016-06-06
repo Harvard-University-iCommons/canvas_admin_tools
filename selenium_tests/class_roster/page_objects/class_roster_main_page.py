@@ -8,6 +8,11 @@ from selenium_tests.class_roster.page_objects.class_roster_base_page_object \
 
 
 class Locators(object):
+    # It's currently syntactically difficult to find an exact match for the
+    # breadcrumb which would be more accurate ("Manage Course" link > Class
+    # Roster".  There are currently no child pages for class roster, but just
+    # note that we need to find a better location for when there are child
+    # pages, as this locator will always be present in the breadcrumbs.
     CLASS_ROSTER_BREADCRUMB = (By.XPATH, './/h1[contains(., "Class Roster")]')
 
     @classmethod
