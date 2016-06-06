@@ -20,7 +20,6 @@ class MPPermissionTests(CourseAdminBaseTestCase):
         # Go back to the Manage Course Dashboard
         self.driver.get(self.TOOL_URL)
 
-
         if given_access == 'yes':
             self.assertTrue(
                 self.course_admin_dashboard_page
