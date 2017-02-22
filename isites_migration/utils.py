@@ -6,6 +6,8 @@ import gzip
 import json
 import ssl
 import re
+from io import BytesIO
+import sys
 
 import boto3
 from django.conf import settings
@@ -82,6 +84,8 @@ def export_files(keyword):
        the zipfile, and 3) name of file (key) in s3.  We're using the keyword for all
        three of these identifiers now."""
     s3_bucket = settings.AWS_EXPORT_BUCKET_ISITES_FILES
+    s3_source_bucket = settings.AWS_SOURCE_BUCKET_ISITES_FILES
+
     logger.info("Beginning iSites file export for keyword %s to S3 bucket %s",
                 keyword, s3_bucket)
 
@@ -113,6 +117,7 @@ def export_files(keyword):
     zip_filename = os.path.join(settings.EXPORT_DIR, "%s.zip" % keyword)
     logger.info('Creating zip file %s to store archive' % zip_filename)
 
+    s3 = boto3.client('s3')
     # Write files and text directly to the archive as we go.  Allow for ZIP64
     # extension to accomodate zip files > 2GB
     with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_STORED, True) as z_file:
@@ -125,7 +130,7 @@ def export_files(keyword):
             logger.debug("topic id for file node %d is %s",
                          file_node.file_node_id, topic_id_str)
             _export_topic_file(file_node, topic_titles_by_id[int(topic_id_str)],
-                               keyword, z_file)
+                               keyword, z_file, s3, s3_source_bucket)
         # Export all text
         for text in _get_topic_text_by_topic_id(list(topic_titles_by_id)):
             _export_topic_text(text, topic_titles_by_id[text.topic_id],
@@ -277,7 +282,7 @@ def get_previous_isites(course_instance_id):
     return previous_sites
 
 
-def _export_topic_file(file_node, topic_title, keyword, zip_file):
+def _export_topic_file(file_node, topic_title, keyword, zip_file, s3, source_bucket):
     logger.debug(u"Exporting file node %s for topic %s",
                  file_node.file_node_id, topic_title)
     # There should always be a storage node for topic files, either in the node
@@ -309,12 +314,14 @@ def _export_topic_file(file_node, topic_title, keyword, zip_file):
     ).encode('utf8')
 
     try:
+        isites_doc = s3.get_object(Bucket=source_bucket, Key=source_file.lstrip('/'))
         if file_node.encoding == 'gzip':
             #  Read the whole file as a byte string and write it to the archive
-            with gzip.open(source_file, 'rb') as s_file:
-                zip_file.writestr(export_file, s_file.read())
+            bytestream = BytesIO(isites_doc['Body'].read())
+            file_content = gzip.GzipFile(None, 'rb', fileobj=bytestream).read()
+            zip_file.writestr(export_file, file_content)
         else:
-            zip_file.write(source_file, export_file)
+            zip_file.writestr(export_file, isites_doc['Body'].read())
 
         # Encoding source_file so the log string remains a bytestring
         logger.debug("Copied file %s to archive location %s",
